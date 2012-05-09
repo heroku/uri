@@ -1,0 +1,12 @@
+{application, uri,
+ [{description, "URI Parsing/Encoding Library"}
+  ,{vsn, "0.1.0"}
+  ,{registered, []}
+  ,{applications,
+    [kernel
+     ,stdlib
+    ]}
+  ,{env,
+    [
+    ]}
+ ]}.
