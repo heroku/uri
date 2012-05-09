@@ -79,12 +79,14 @@
     [{scheme(), default_scheme_port_number()}].
 
 scheme_defaults() ->
-    [{http,  80},
-     {https, 443},
-     {ftp,   21},
-     {ssh,   22},
-     {sftp,  22},
-     {tftp,  69}].
+    [{http,  80}
+     ,{https, 443}
+     ,{ftp,   21}
+     ,{ssh,   22}
+     ,{sftp,  22}
+     ,{tftp,  69}
+     ,{syslog, 601}
+    ].
 
 parse(AbsURI) ->
     parse(AbsURI, []).
