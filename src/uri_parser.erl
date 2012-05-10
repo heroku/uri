@@ -62,31 +62,11 @@
 -module(uri_parser).
 
 -export([parse/1, parse/2,
-         scheme_defaults/0,
          encode/1, decode/1]).
-
--export_type([scheme/0, default_scheme_port_number/0]).
-
 
 %%%=========================================================================
 %%%  API
 %%%=========================================================================
-
--type scheme() :: atom().
--type default_scheme_port_number() :: pos_integer().
-
--spec scheme_defaults() ->
-    [{scheme(), default_scheme_port_number()}].
-
-scheme_defaults() ->
-    [{http,  80}
-     ,{https, 443}
-     ,{ftp,   21}
-     ,{ssh,   22}
-     ,{sftp,  22}
-     ,{tftp,  69}
-     ,{syslog, 601}
-    ].
 
 parse(AbsURI) ->
     parse(AbsURI, []).
@@ -131,12 +111,11 @@ do_decode([]) ->
 %%%========================================================================
 
 which_scheme_defaults(Opts) ->
-    Key = scheme_defaults,
-    case lists:keysearch(Key, 1, Opts) of
-        {value, {Key, SchemeDefaults}} ->
+    case lists:keysearch(scheme_defaults, 1, Opts) of
+        {value, {scheme_defaults, SchemeDefaults}} ->
             SchemeDefaults;
         false ->
-            scheme_defaults()
+            uri_defaults:scheme_defaults()
     end.
 
 parse_scheme(AbsURI, Opts) ->
