@@ -9,6 +9,20 @@
          ,parse/2
         ]).
 
+-type scheme() :: atom().
+
+-type parsed_uri() ::
+        {Scheme::scheme(),
+         Auth::iolist(),
+         Host::iolist(),
+         inet:port_number(),
+         Path::iolist(),
+         Query::iolist()}.
+
+-export_types([ scheme/0,
+                parsed_uri/0
+              ]).
+
 parse(Uri) ->
     uri_parser:parse(Uri).
 
