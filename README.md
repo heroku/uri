@@ -2,7 +2,14 @@
 
 ## Description
 
-This OTP library provides functions for parsing RFC3896 URI strings.
+This OTP library provides functions for parsing and formatting RFC3896 URI strings.
+
+## Examples
+
+    1> uri:parse("syslog://somehost:912").
+    {ok,{syslog,[],"somehost",912,"/",[]}}
+    2> uri_format:to_string(element(2, v(1))).
+    "syslog://somehost:912/"
 
 # License
 
