@@ -19,9 +19,9 @@
          Path::iolist(),
          Query::iolist()}.
 
--export_types([ scheme/0,
-                parsed_uri/0
-              ]).
+-export_type([ scheme/0,
+               parsed_uri/0
+             ]).
 
 parse(Uri) ->
     uri_parser:parse(Uri).
