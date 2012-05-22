@@ -7,6 +7,7 @@
 
 -export([parse/1
          ,parse/2
+         ,format/1
         ]).
 
 -type scheme() :: atom().
@@ -28,3 +29,6 @@ parse(Uri) ->
 
 parse(Uri, Opts) ->
     uri_parser:parse(Uri, Opts).
+
+format(Uri) when is_tuple(Uri) ->
+    uri_format:to_iolist(Uri).
