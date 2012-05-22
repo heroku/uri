@@ -110,7 +110,7 @@ do_decode([]) ->
 %%% Internal functions
 %%%========================================================================
 
-which_scheme_defaults(Opts) ->
+scheme_defaults(Opts) ->
     case lists:keysearch(scheme_defaults, 1, Opts) of
         {value, {scheme_defaults, SchemeDefaults}} ->
             SchemeDefaults;
@@ -123,13 +123,15 @@ parse_scheme(AbsURI, Opts) ->
         {error, no_scheme} ->
             {error, no_scheme};
         {SchemeStr, Rest} ->
-            Scheme = list_to_atom(http_util:to_lower(SchemeStr)),
-            SchemeDefaults = which_scheme_defaults(Opts),
-            case lists:keysearch(Scheme, 1, SchemeDefaults) of
-                {value, {Scheme, DefaultPort}} ->
-                    {Scheme, DefaultPort, Rest};
-                false ->
-                    {Scheme, no_default_port, Rest}
+            try list_to_existing_atom(http_util:to_lower(SchemeStr)) of
+                Scheme when is_atom(Scheme) ->
+                    DefaultPort = proplists:get_value(Scheme,
+                                                      scheme_defaults(Opts),
+                                                      no_default_port),
+                    {Scheme, DefaultPort, Rest}
+            catch
+                error:badarg ->
+                    {error, {unknown_scheme, SchemeStr}}
             end
     end.
 
