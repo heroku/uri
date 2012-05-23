@@ -7,7 +7,8 @@
 
 -export([parse/1
          ,parse/2
-         ,format/1
+         ,to_iolist/1
+         ,to_binary/1
         ]).
 
 -type scheme() :: atom().
@@ -30,5 +31,8 @@ parse(Uri) ->
 parse(Uri, Opts) ->
     uri_parser:parse(Uri, Opts).
 
-format(Uri) when is_tuple(Uri) ->
+to_iolist(Uri) when is_tuple(Uri) ->
     uri_format:to_iolist(Uri).
+
+to_binary(Uri) when is_tuple(Uri) ->
+    uri_format:to_binary(Uri).
