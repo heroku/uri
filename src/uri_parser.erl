@@ -197,7 +197,7 @@ int_port(no_default_port) ->
     throw({error, no_default_port}).
 
 path("") ->
-    "/";
+    "";
 path(Path) ->
     Path.
 
