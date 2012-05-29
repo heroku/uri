@@ -5,40 +5,17 @@
 %% @end
 -module(uri_format).
 
--export([to_iolist/1
-         ,to_binary/1
-         ,to_string/1]).
+-export([to_iolist/2]).
 
--spec to_iolist(uri:parsed_uri()) -> iolist().
-to_iolist({Scheme, UserInfo, Host, Port, Path, Query}) ->
-    case uri_defaults:is_default_port(Scheme, Port) of
-        default ->
-            [ scheme_to_iolist(Scheme),
-              "://",
-              user_info_to_iolist(UserInfo),
-              Host,
-              Path,
-              Query
-            ];
-        non_default ->
-            [ scheme_to_iolist(Scheme),
-              "://",
-              user_info_to_iolist(UserInfo),
-              Host,
-              ":", integer_to_list(Port),
-              Path,
-              Query
-            ]
-    end.
-
--spec to_string(uri:parsed_uri()) -> [char()].
-to_string(ParsedUri) ->
-    binary_to_list(to_binary(ParsedUri)).
-
--spec to_binary(uri:parsed_uri()) -> binary().
-to_binary(ParsedUri) ->
-    iolist_to_binary(to_iolist(ParsedUri)).
-
+-spec to_iolist(uri:parsed_uri(), uri:opts()) -> iolist().
+to_iolist({Scheme, UserInfo, Host, Port, Path, Query}, Opts) ->
+    [ scheme_to_iolist(Scheme),
+      "://",
+      user_info_to_iolist(UserInfo),
+      Host,
+      port_info_to_iolist(Scheme, Port, Opts),
+      path_query_to_iolist(Path, Query)
+    ].
 
 scheme_to_iolist(Scheme) when is_atom(Scheme) ->
     atom_to_binary(Scheme, latin1).
@@ -47,3 +24,18 @@ user_info_to_iolist("") ->
     "";
 user_info_to_iolist(IoList) ->
     [ IoList, "@" ].
+
+port_info_to_iolist(Scheme, Port, Opts) ->
+    Schemes = proplists:get_value(scheme_defaults, Opts,
+                                  uri_defaults:scheme_defaults()),
+    case uri_defaults:is_default_port(Scheme, Port, Schemes) of
+          default -> "";
+          non_default -> [":", integer_to_list(Port)]
+    end.
+
+path_query_to_iolist("", "") ->
+    "";
+path_query_to_iolist(Path, "") ->
+    Path;
+path_query_to_iolist(Path, Query) ->
+    [Path, Query].
