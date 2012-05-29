@@ -8,10 +8,17 @@
 -export([parse/1
          ,parse/2
          ,to_iolist/1
+         ,to_iolist/2
          ,to_binary/1
+         ,to_binary/2
+         ,to_string/1
+         ,to_string/2
         ]).
 
 -type scheme() :: atom().
+
+-type opt() :: {scheme_defaults, list()}.
+-type opts() :: [opt()].
 
 -type parsed_uri() ::
         {Scheme::scheme(),
@@ -22,7 +29,8 @@
          Query::iolist()}.
 
 -export_type([ scheme/0,
-               parsed_uri/0
+               parsed_uri/0,
+               opts/0
              ]).
 
 parse(Uri) ->
@@ -32,7 +40,19 @@ parse(Uri, Opts) ->
     uri_parser:parse(Uri, Opts).
 
 to_iolist(Uri) when is_tuple(Uri) ->
-    uri_format:to_iolist(Uri).
+    to_iolist(Uri, []).
 
 to_binary(Uri) when is_tuple(Uri) ->
-    uri_format:to_binary(Uri).
+    to_binary(Uri, []).
+
+to_string(Uri) when is_tuple(Uri) ->
+    to_string(Uri, []).
+
+to_iolist(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
+    uri_format:to_iolist(Uri, Opts).
+
+to_binary(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
+    iolist_to_binary(uri_format:to_iolist(Uri, Opts)).
+
+to_string(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
+    binary_to_list(to_binary(Uri, Opts)).
