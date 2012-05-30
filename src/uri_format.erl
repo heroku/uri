@@ -14,7 +14,8 @@ to_iolist({Scheme, UserInfo, Host, Port, Path, Query}, Opts) ->
       user_info_to_iolist(UserInfo),
       Host,
       port_info_to_iolist(Scheme, Port, Opts),
-      path_query_to_iolist(Path, Query)
+      Path,
+      Query
     ].
 
 scheme_to_iolist(Scheme) when is_atom(Scheme) ->
@@ -32,10 +33,3 @@ port_info_to_iolist(Scheme, Port, Opts) ->
           default -> "";
           non_default -> [":", integer_to_list(Port)]
     end.
-
-path_query_to_iolist("", "") ->
-    "";
-path_query_to_iolist(Path, "") ->
-    Path;
-path_query_to_iolist(Path, Query) ->
-    [Path, Query].
