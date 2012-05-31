@@ -17,7 +17,8 @@
 
 -type scheme() :: atom().
 
--type opt() :: {scheme_defaults, list()}.
+-type opt() :: {scheme_defaults, list()} |
+               uri_format:opt().
 -type opts() :: [opt()].
 
 -type parsed_uri() ::
