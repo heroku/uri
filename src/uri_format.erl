@@ -5,23 +5,26 @@
 %% @end
 -module(uri_format).
 
--export([to_iolist/2]).
+-export([to_iolist/2
+         ,full_host/2
+        ]).
 
 -type opt() :: {hide_user_info, boolean()}.
 -export_type([opt/0]).
 
 -spec to_iolist(uri:parsed_uri(), uri:opts()) -> iolist().
-to_iolist({Scheme, UserInfo, Host, Port, Path, Query}, Opts) ->
-    Schemes = proplists:get_value(scheme_defaults, Opts,
-                                  uri_defaults:scheme_defaults()),
+to_iolist({Scheme, UserInfo, _Host, _Port, Path, Query} = Uri, Opts) ->
     [ scheme_to_iolist(Scheme),
       "://",
       user_info_to_iolist(UserInfo, Opts),
-      Host,
-      port_info_to_iolist(Scheme, Port, Schemes),
+      full_host(Uri, Opts),
       Path,
       Query
     ].
+
+schemes(Opts) ->
+    proplists:get_value(scheme_defaults, Opts,
+                        uri_defaults:scheme_defaults()).
 
 scheme_to_iolist(Scheme) when is_atom(Scheme) ->
     atom_to_binary(Scheme, latin1).
@@ -40,3 +43,7 @@ port_info_to_iolist(Scheme, Port, Schemes) ->
           default -> "";
           non_default -> [":", integer_to_list(Port)]
     end.
+
+-spec full_host(uri:parsed_uri(), uri:opts()) -> iolist().
+full_host({Scheme, _UserInfo, Host, Port, _Path, _Query}, Opts) ->
+    [Host, port_info_to_iolist(Scheme, Port, schemes(Opts))].
