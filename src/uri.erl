@@ -13,6 +13,7 @@
          ,to_binary/2
          ,to_string/1
          ,to_string/2
+         ,full_host_iolist/2
         ]).
 
 -type scheme() :: atom().
@@ -57,3 +58,6 @@ to_binary(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
 
 to_string(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
     binary_to_list(to_binary(Uri, Opts)).
+
+full_host_iolist(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
+    uri_format:full_host(Uri, Opts).
