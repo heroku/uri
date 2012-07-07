@@ -14,6 +14,7 @@
          ,to_string/1
          ,to_string/2
          ,full_host_iolist/2
+         ,host_port/1
         ]).
 
 -type scheme() :: atom().
@@ -61,3 +62,6 @@ to_string(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
 
 full_host_iolist(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
     uri_format:full_host(Uri, Opts).
+
+host_port({_, _, Host, Port, _, _}) ->
+    {Host, Port}.
