@@ -17,27 +17,33 @@
          ,host_port/1
         ]).
 
--type scheme() :: atom().
+-include("uri.hrl").
 
--type opt() :: {scheme_defaults, list()} |
+-type scheme() :: atom().
+-type host() :: binary() | iolist().
+-type userauth() :: binary() | iolist().
+-type path() :: binary() | iolist().
+-type querystring() :: binary() | iolist().
+-type frag() :: binary() | iolist().
+
+-type opt() :: {scheme_defaults, uri_defaults:scheme_defaults()} |
                uri_format:opt().
 -type opts() :: [opt()].
 
--type parsed_uri() ::
-        {Scheme::scheme(),
-         Auth::iolist(),
-         Host::iolist(),
-         inet:port_number(),
-         Path::iolist(),
-         Query::iolist()}.
+-type parsed_uri() :: #uri{}.
 
 -export_type([ scheme/0,
+               host/0,
+               userauth/0,
+               path/0,
+               querystring/0,
+               frag/0,
                parsed_uri/0,
                opts/0
              ]).
 
 parse(Uri) ->
-    uri_parser:parse(Uri).
+    uri_parser:parse(Uri, []).
 
 parse(Uri, Opts) ->
     uri_parser:parse(Uri, Opts).
@@ -65,3 +71,4 @@ full_host_iolist(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
 
 host_port({_, _, Host, Port, _, _}) ->
     {Host, Port}.
+
