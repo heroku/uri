@@ -12,9 +12,12 @@
          ,is_default_port/3
         ]).
 
--spec scheme_defaults() ->
+-type scheme_defaults() ::
     [{uri:scheme(), DefaultPort::inet:port_number()}].
 
+-export_type([ scheme_defaults/0 ]).
+
+-spec scheme_defaults() -> scheme_defaults().
 scheme_defaults() ->
     [{http,  80}
      ,{https, 443}
