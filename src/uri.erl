@@ -19,7 +19,7 @@
 
 -include("uri.hrl").
 
--type scheme() :: atom().
+-type scheme() :: atom() | binary() | iolist().
 -type host() :: binary() | iolist().
 -type userauth() :: binary() | iolist().
 -type path() :: binary() | iolist().
