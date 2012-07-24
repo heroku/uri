@@ -9,13 +9,18 @@
          ,full_host/2
         ]).
 
+-include("uri.hrl").
+
 -type opt() :: {hide_user_info, boolean()}.
 -export_type([opt/0]).
 
 -spec to_iolist(uri:parsed_uri(), uri:opts()) -> iolist().
-to_iolist({Scheme, UserInfo, _Host, _Port, Path, Query} = Uri, Opts) ->
+to_iolist(#uri{scheme=Scheme,
+               userauth=UserInfo,
+               path=Path,
+               q=Query} = Uri, Opts) ->
     [ scheme_to_iolist(Scheme),
-      "://",
+      <<"://">>,
       user_info_to_iolist(UserInfo, Opts),
       full_host(Uri, Opts),
       Path,
@@ -33,9 +38,9 @@ user_info_to_iolist("", _) -> "";
 user_info_to_iolist(UserInfo, Opts) ->
     case proplists:get_value(hide_user_info, Opts, false) of
         true ->
-            "xxx:yyy@";
+            <<"xxx:yyy@">>;
         false ->
-            [UserInfo, "@"]
+            [UserInfo, $@]
     end.
 
 port_info_to_iolist(Scheme, Port, Schemes) ->
@@ -45,5 +50,5 @@ port_info_to_iolist(Scheme, Port, Schemes) ->
     end.
 
 -spec full_host(uri:parsed_uri(), uri:opts()) -> iolist().
-full_host({Scheme, _UserInfo, Host, Port, _Path, _Query}, Opts) ->
+full_host(#uri{scheme=Scheme, host=Host, port=Port}, Opts) ->
     [Host, port_info_to_iolist(Scheme, Port, schemes(Opts))].
