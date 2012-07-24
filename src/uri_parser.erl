@@ -152,7 +152,7 @@ decode_query(Query, _Options, Uri = #uri{}) ->
     Uri#uri{q = <<$?, Query/binary>>}.
 
 decode_frag(Frag, _Options, Uri = #uri{}) ->
-    Uri#uri{frag = <<$#, Frag>>}.
+    Uri#uri{frag = <<$#, Frag/binary>>}.
 
 %% parse_test() ->
 %%     URI = <<"redis://fccab7a749daf4dda5f33d44@10.2.67.96:6379/?foo#blah">>,
