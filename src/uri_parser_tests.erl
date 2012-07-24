@@ -1,4 +1,4 @@
--module(uri_parser2_tests).
+-module(uri_parser_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 -include("uri.hrl").

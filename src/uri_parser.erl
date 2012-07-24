@@ -41,7 +41,7 @@
 %%
 %%
 
--module(uri_parser2).
+-module(uri_parser).
 
 -include("uri.hrl").
 
