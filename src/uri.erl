@@ -48,27 +48,27 @@ parse(Uri) ->
 parse(Uri, Opts) ->
     uri_parser:parse(Uri, Opts).
 
-to_iolist(Uri) when is_tuple(Uri) ->
+to_iolist(Uri = #uri{}) ->
     to_iolist(Uri, []).
 
-to_binary(Uri) when is_tuple(Uri) ->
+to_binary(Uri = #uri{}) ->
     to_binary(Uri, []).
 
-to_string(Uri) when is_tuple(Uri) ->
+to_string(Uri = #uri{}) ->
     to_string(Uri, []).
 
-to_iolist(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
+to_iolist(Uri = #uri{}, Opts) when is_list(Opts) ->
     uri_format:to_iolist(Uri, Opts).
 
-to_binary(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
+to_binary(Uri = #uri{}, Opts) when is_list(Opts) ->
     iolist_to_binary(uri_format:to_iolist(Uri, Opts)).
 
-to_string(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
+to_string(Uri = #uri{}, Opts) when is_list(Opts) ->
     binary_to_list(to_binary(Uri, Opts)).
 
-full_host_iolist(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
+full_host_iolist(Uri = #uri{}, Opts) when is_list(Opts) ->
     uri_format:full_host(Uri, Opts).
 
-host_port({_, _, Host, Port, _, _}) ->
+host_port(#uri{host = Host, port = Port}) ->
     {Host, Port}.
 
