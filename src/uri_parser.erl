@@ -47,6 +47,8 @@
 
 -export([parse/2]).
 
+parse(List, Options) when is_list(List), is_list(Options) ->
+    parse_scheme(iolist_to_binary(List), Options, #uri{});
 parse(Str, Options) when is_binary(Str), is_list(Options) ->
     parse_scheme(Str, Options, #uri{}).
 
