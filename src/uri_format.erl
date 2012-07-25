@@ -34,7 +34,9 @@ schemes(Opts) ->
                         uri_defaults:scheme_defaults()).
 
 scheme_to_iolist(Scheme) when is_atom(Scheme) ->
-    atom_to_binary(Scheme, latin1).
+    atom_to_binary(Scheme, latin1);
+scheme_to_iolist(Scheme) when is_binary(Scheme); is_list(Scheme) ->
+    Scheme.
 
 user_info_to_iolist("", _) -> "";
 user_info_to_iolist(UserInfo, Opts) ->
