@@ -45,6 +45,9 @@
 parse(Uri) ->
     uri_parser:parse(Uri, []).
 
+-spec parse(Uri, opts()) ->
+                   #uri{}
+                       when Uri :: iolist() | binary().
 parse(Uri, Opts) ->
     uri_parser:parse(Uri, Opts).
 
