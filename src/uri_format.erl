@@ -18,13 +18,15 @@
 to_iolist(#uri{scheme=Scheme,
                userauth=UserInfo,
                path=Path,
-               q=Query} = Uri, Opts) ->
+               q=Query,
+               frag=Frag} = Uri, Opts) ->
     [ scheme_to_iolist(Scheme),
       <<"://">>,
       user_info_to_iolist(UserInfo, Opts),
       full_host(Uri, Opts),
-      Path,
-      Query
+      path(Path),
+      querystring(Query),
+      frag(Frag)
     ].
 
 schemes(Opts) ->
@@ -52,3 +54,15 @@ port_info_to_iolist(Scheme, Port, Schemes) ->
 -spec full_host(uri:parsed_uri(), uri:opts()) -> iolist().
 full_host(#uri{scheme=Scheme, host=Host, port=Port}, Opts) ->
     [Host, port_info_to_iolist(Scheme, Port, schemes(Opts))].
+
+%% If defined, Path starts with /
+path(undefined) -> [];
+path(Path) -> Path.
+
+%% If defined, querystring starts with ?
+querystring(undefined) -> [];
+querystring(Qstr) -> Qstr.
+
+%% If defined, frag starts with #
+frag(undefined) -> [];
+frag(Frag) -> Frag.
