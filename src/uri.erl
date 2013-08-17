@@ -69,7 +69,13 @@ host_port({_, _, Host, Port, _, _}) ->
 
 -spec join(Uri :: [string()]) -> string().
 join(Uri) ->
-    join(Uri, []).
+    %% remove empty strings
+    Uri1 = lists:filter(fun(V) ->
+                                if V == "" -> false;
+                                   true -> true
+                                end
+                        end, Uri),
+    join(Uri1, []).
 
 join([], Acc) ->
     lists:concat(Acc);
