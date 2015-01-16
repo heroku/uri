@@ -15,6 +15,7 @@
          ,to_string/2
          ,full_host_iolist/2
          ,host_port/1
+         ,join/1
         ]).
 
 -type scheme() :: atom().
@@ -65,3 +66,18 @@ full_host_iolist(Uri, Opts) when is_tuple(Uri), is_list(Opts) ->
 
 host_port({_, _, Host, Port, _, _}) ->
     {Host, Port}.
+
+-spec join(Uri :: [string()]) -> string().
+join(Uri) ->
+    %% remove empty strings
+    Uri1 = lists:filter(fun(V) ->
+                                if V == "" -> false;
+                                   true -> true
+                                end
+                        end, Uri),
+    join(Uri1, []).
+
+join([], Acc) ->
+    lists:concat(Acc);
+join([H|T], Acc) ->
+    join(T, Acc ++ [H] ++ ["/"]).
