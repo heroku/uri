@@ -2,6 +2,7 @@
  [{description, "URI Parsing/Encoding Library"}
   ,{vsn, "0.1.0"}
   ,{registered, []}
+  ,{modules, [uri, uri_defaults, uri_format, uri_parser]}
   ,{applications,
     [kernel
      ,stdlib
